@@ -22,7 +22,7 @@ class OsuBuffer {
      * @returns {String}
      */
     toString(type = 'binary') {
-        return this.buffer.toString(type);
+        return Promise.resolve(this.buffer.toString(type));
     }
 
     /**
@@ -81,7 +81,7 @@ class OsuBuffer {
      * @return {Number}
      */
     ReadByte() {
-        return this.ReadUInt8();
+        return Promise.resolve(this.ReadUInt8());
     }
 
     /**
@@ -91,7 +91,7 @@ class OsuBuffer {
      */
     ReadInt(byteLength) {
         this.position += byteLength;
-        return this.buffer.readIntLE(this.position - byteLength, byteLength);
+        return Promise.resolve(this.buffer.readIntLE(this.position - byteLength, byteLength));
     }
 
     /**
@@ -101,7 +101,7 @@ class OsuBuffer {
      */
     ReadUInt(byteLength) {
         this.position += byteLength;
-        return this.buffer.readUIntLE(this.position - byteLength, byteLength);
+        return Promise.resolve(this.buffer.readUIntLE(this.position - byteLength, byteLength));
     }
 
     /**
@@ -109,7 +109,7 @@ class OsuBuffer {
      * @return {Number}
      */
     ReadInt8() {
-        return this.ReadInt(1);
+        return Promise.resolve(this.ReadInt(1));
     }
 
     /**
@@ -117,7 +117,7 @@ class OsuBuffer {
      * @return {Number}
      */
     ReadUInt8() {
-        return this.ReadUInt(1);
+        return Promise.resolve(this.ReadUInt(1));
     }
 
     /**
@@ -125,7 +125,7 @@ class OsuBuffer {
      * @return {Number}
      */
     ReadInt16() {
-        return this.ReadInt(2);
+        return Promise.resolve(this.ReadInt(2));
     }
 
     /**
@@ -133,7 +133,7 @@ class OsuBuffer {
      * @return {Number}
      */
     ReadUInt16() {
-        return this.ReadUInt(2);
+        return Promise.resolve(this.ReadUInt(2));
     }
 
     /**
@@ -141,7 +141,7 @@ class OsuBuffer {
      * @return {Number}
      */
     ReadInt32() {
-        return this.ReadInt(4);
+        return Promise.resolve(this.ReadInt(4));
     }
 
     /**
@@ -149,7 +149,7 @@ class OsuBuffer {
      * @return {Number}
      */
     ReadUInt32() {
-        return this.ReadUInt(4);
+        return Promise.resolve(this.ReadUInt(4));
     }
 
     /**
@@ -157,7 +157,7 @@ class OsuBuffer {
      * @return {Number}
      */
     ReadInt64() {
-        return (this.ReadInt(4) << 8) + this.ReadInt(4);
+        return Promise.resolve((this.ReadInt(4) << 8) + this.ReadInt(4));
     }
 
     /**
@@ -165,7 +165,7 @@ class OsuBuffer {
      * @return {Number}
      */
     ReadUInt64() {
-        return (this.ReadUInt(4) << 8) + this.ReadUInt(4);
+        return Promise.resolve((this.ReadUInt(4) << 8) + this.ReadUInt(4));
     }
 
     /**
@@ -174,7 +174,7 @@ class OsuBuffer {
      */
     ReadFloat() {
         this.position += 4;
-        return this.buffer.readFloatLE(this.position - 4);
+        return Promise.resolve(this.buffer.readFloatLE(this.position - 4));
     }
 
     /**
@@ -183,7 +183,7 @@ class OsuBuffer {
      */
     ReadDouble() {
         this.position += 8;
-        return this.buffer.readDoubleLE(this.position - 8);
+        return Promise.resolve(this.buffer.readDoubleLE(this.position - 8));
     }
 
     /**
@@ -192,7 +192,7 @@ class OsuBuffer {
      * @returns {String}
      */
     ReadString(length) {
-        return this.Slice(length, false).toString();
+        return Promise.resolve(this.Slice(length, false).toString());
     }
 
     /**
@@ -217,7 +217,7 @@ class OsuBuffer {
             } while (!end);
         }
 
-        return total;
+        return Promise.resolve(total);
     }
 
     /**
@@ -226,7 +226,7 @@ class OsuBuffer {
      * @returns {Number}
      */
     ReadULeb128() {
-        return this.ReadVarint();
+        return Promise.resolve(this.ReadVarint());
     }
 
     /**
@@ -234,7 +234,7 @@ class OsuBuffer {
      * @return {boolean}
      */
     ReadBoolean() {
-        return Boolean(this.ReadInt(1));
+        return Promise.resolve(Boolean(this.ReadInt(1)));
     }
 
     /**
@@ -245,9 +245,9 @@ class OsuBuffer {
         let isString = this.ReadByte() === 11;
         if(isString) {
             let len = this.ReadVarint();
-            return this.ReadString(len);
+            return Promise.resolve(this.ReadString(len));
         } else {
-            return '';
+            return Promise.resolve('');
         }
     }
 
