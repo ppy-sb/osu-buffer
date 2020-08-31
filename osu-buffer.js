@@ -21,8 +21,8 @@ class OsuBuffer {
      * Returns buffer to a binary string
      * @returns {String}
      */
-    toString(type = 'binary') {
-        return Promise.resolve(this.buffer.toString(type));
+    async toString(type = 'binary') {
+        return this.buffer.toString(type);
     }
 
     /**
@@ -80,8 +80,8 @@ class OsuBuffer {
      * Does the same thing as ReadUInt8()
      * @return {Number}
      */
-    ReadByte() {
-        return Promise.resolve(this.ReadUInt8());
+    async ReadByte() {
+        return this.ReadUInt8();
     }
 
     /**
@@ -89,9 +89,9 @@ class OsuBuffer {
      * @param {Number} byteLength
      * @return {Number}
      */
-    ReadInt(byteLength) {
+    async ReadInt(byteLength) {
         this.position += byteLength;
-        return Promise.resolve(this.buffer.readIntLE(this.position - byteLength, byteLength));
+        return this.buffer.readIntLE(this.position - byteLength, byteLength);
     }
 
     /**
@@ -99,91 +99,91 @@ class OsuBuffer {
      * @param {Number} byteLength
      * @return {Number}
      */
-    ReadUInt(byteLength) {
+    async ReadUInt(byteLength) {
         this.position += byteLength;
-        return Promise.resolve(this.buffer.readUIntLE(this.position - byteLength, byteLength));
+        return this.buffer.readUIntLE(this.position - byteLength, byteLength);
     }
 
     /**
      * Reads a 8-bit signed integer from the buffer
      * @return {Number}
      */
-    ReadInt8() {
-        return Promise.resolve(this.ReadInt(1));
+    async ReadInt8() {
+        return this.ReadInt(1);
     }
 
     /**
      * Reads a 8-bit unsigned integer from the buffer
      * @return {Number}
      */
-    ReadUInt8() {
-        return Promise.resolve(this.ReadUInt(1));
+    async ReadUInt8() {
+        return this.ReadUInt(1);
     }
 
     /**
      * Reads a 16-bit signed integer from the buffer
      * @return {Number}
      */
-    ReadInt16() {
-        return Promise.resolve(this.ReadInt(2));
+    async ReadInt16() {
+        return this.ReadInt(2);
     }
 
     /**
      * Reads a 16-bit unsigned integer from the buffer
      * @return {Number}
      */
-    ReadUInt16() {
-        return Promise.resolve(this.ReadUInt(2));
+    async ReadUInt16() {
+        return this.ReadUInt(2);
     }
 
     /**
      * Reads a 32-bit signed integer from the buffer
      * @return {Number}
      */
-    ReadInt32() {
-        return Promise.resolve(this.ReadInt(4));
+    async ReadInt32() {
+        return this.ReadInt(4);
     }
 
     /**
      * Reads a 32-bit signed unsigned from the buffer
      * @return {Number}
      */
-    ReadUInt32() {
-        return Promise.resolve(this.ReadUInt(4));
+    async ReadUInt32() {
+        return this.ReadUInt(4);
     }
 
     /**
      * Reads a 64-bit signed integer from the buffer
      * @return {Number}
      */
-    ReadInt64() {
-        return Promise.resolve((this.ReadInt(4) << 8) + this.ReadInt(4));
+    async ReadInt64() {
+        return (this.ReadInt(4) << 8) + this.ReadInt(4);
     }
 
     /**
      * Reads a 64-bit signed unsigned from the buffer
      * @return {Number}
      */
-    ReadUInt64() {
-        return Promise.resolve((this.ReadUInt(4) << 8) + this.ReadUInt(4));
+    async ReadUInt64() {
+        return (this.ReadUInt(4) << 8) + this.ReadUInt(4);
     }
 
     /**
      * Reads a 32-bit Float from the buffer
      * @returns {Number}
      */
-    ReadFloat() {
+    async ReadFloat() {
         this.position += 4;
-        return Promise.resolve(this.buffer.readFloatLE(this.position - 4));
+        return this.buffer.readFloatLE(this.position - 4);
     }
 
     /**
      * Reads a 64-bit Double from the buffer
      * @returns {Number}
      */
-    ReadDouble() {
+    async ReadDouble() {
         this.position += 8;
-        return Promise.resolve(this.buffer.readDoubleLE(this.position - 8));
+        return this.buffer.readDoubleLE(this.position - 8);
     }
 
     /**
@@ -191,15 +191,15 @@ class OsuBuffer {
      * @param {Number} length
      * @returns {String}
      */
-    ReadString(length) {
-        return Promise.resolve(this.Slice(length, false).toString());
+    async ReadString(length) {
+        return this.Slice(length, false).toString();
     }
 
     /**
      * Decodes a 7-bit encoded integer from the buffer
      * @returns {Number}
      */
-    ReadVarint() {
+    async ReadVarint() {
         let total = 0;
         let shift = 0;
         let byte = this.ReadUInt8();
@@ -217,7 +217,7 @@ class OsuBuffer {
             } while (!end);
         }
 
-        return Promise.resolve(total);
+        return total;
     }
 
     /**
@@ -225,29 +225,29 @@ class OsuBuffer {
      * @deprecated Use ReadVarint instead
      * @returns {Number}
      */
-    ReadULeb128() {
-        return Promise.resolve(this.ReadVarint());
+    async ReadULeb128() {
+        return this.ReadVarint();
     }
 
     /**
      * Reads a byte from buffer and converts to boolean
      * @return {boolean}
      */
-    ReadBoolean() {
-        return Promise.resolve(Boolean(this.ReadInt(1)));
+    async ReadBoolean() {
+        return Boolean(this.ReadInt(1));
     }
 
     /**
      * Reads an osu! encoded string from the Buffer
      * @returns {string}
      */
-    ReadOsuString() {
+    async ReadOsuString() {
         let isString = this.ReadByte() === 11;
         if(isString) {
             let len = this.ReadVarint();
-            return Promise.resolve(this.ReadString(len));
+            return this.ReadString(len);
         } else {
-            return Promise.resolve('');
+            return '';
         }
     }
 
